@@ -659,15 +659,52 @@ x = Dense(classes, activation=classifier_activation, name="predictions")(x)
   <div id="apli8" class="slide">
     <h1>Metalografías: datos disponibles</h1>
     <p class="center">5 fases del material: matriz, austenita, martensita-austenita, precipitado y defectos</p>
+    <p class="center">42 imágenes etiquetadas, 164 sin etiquetar</p>
     <img src="images/metal1.png" alt="Severidad de síntomas en radiografías" style="max-height: 22rem">
   </div>
 
+  <div id="apli9" class="slide">
+    <h1>Modelos probados</h1>
+    <div class="incremental in-place">
+      <div>
+        <img src="images/unet2.png" alt="Unet" style="height: 15rem">
+        <p class="center"><strong>UNet</strong></p>
+      </div>
+      <div>
+        <img src="images/pixelnet.png" alt="Pixelnet" style="height: 15rem">
+        <p class="center"><strong>PixelNet</strong></p>
+      </div>
+      <div>
+        <img src="images/fpn.png" alt="FPN" style="height: 20rem">
+        <p class="center"><strong>Feature Pyramid Network</strong></p>
+      </div>
+      <div>
+        <img src="images/usss.png" alt="USSS" style="height: 20rem">
+        <p class="center"><strong>Universal Semi-supervised Segmentation</strong></p>
+      </div>
+    </div>
+  </div>
+  <div id="apli10" class="slide">
+    <h1>Propuesta</h1>
+    <div>
+      <img src="images/amve.png" alt="AMVE" style="height: 20rem">
+      <p class="center"><strong>Artificial Multiview Ensemble</strong></p>
+    </div>
+  </div>
 
   <div id="conclusiones" class="slide">
-    <h1>Algunos comentarios</h1>
-    <ul>
-      <li><i>Deep Learning</i> no es la panacea: https://arxiv.org/pdf/2303.01494.pdf</li>
+    <h1>Moralejas y comentarios</h1>
+    <ul class="incremental">
+      <li>Más vale tener buenos datos que buenos modelos</li>
+      <li>Tener buenos datos bien etiquetados es muy costoso</li>
+      <li>Entrenar muchos modelos es muy costoso</li>
+      <li>Modelos sin explicaciones no valen de mucho</li>
+      <li><i>Deep Learning</i> no es la panacea: <a href="https://arxiv.org/pdf/2303.01494.pdf">Clustering?</a> <a href="https://catboost.ai/">CatBoost?</a></li>
     </ul>
+    <div class="flex stretch">
+    <div class="box secondary"><img src="images/openaikenya.png" alt="Exclusive: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic"></div>
+    <div class="box secondary"><img src="images/energyai.png" alt="Training a single AI model can emit as much carbon as five cars in their lifetimes"></div>
+    </div>
   </div>
 
   <script>
