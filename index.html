@@ -1,506 +1,512 @@
 <!DOCTYPE html>
 <html lang=es-es>
-  <meta charset=utf-8>
-  <title>Introducción al Deep Learning y aplicaciones en imágenes</title>
-  <meta name=viewport content="width=device-width">
-  <meta name="duration" content="45" />
-  <link rel=stylesheet href="assets/css/simple.css">
-  <script src="assets/js/b6plus.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<meta charset=utf-8>
+<title>Introducción al Deep Learning y aplicaciones en imágenes</title>
+<meta name=viewport content="width=device-width">
+<meta name="duration" content="45" />
+<link rel=stylesheet href="assets/css/simple.css">
+<link rel=stylesheet href="assets/css/extra.css">
+<script src="assets/js/b6plus.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inconsolata&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-
-
-<!--
-  Slide transitions =========================  
-fade-in
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+  
+  <!--
+    Slide transitions =========================  
+    fade-in
     The new slide appears faint at first and gets more opaque until it completely obscures the previous slide.
-slide-in
+    slide-in
     The new slide moves in from the left, while the previous slide moves back to the left.
-move-left
+    move-left
     The new slides move in from the right while the old slide moves out to the left.
-move-up
+    move-up
     The old slide moves up and the new slide moves in from the bottom.
-flip-up
+    flip-up
     A 3D effect: the bottom of the old slide is lifted up and the slide is turned over to reveal the new slide on its back side.
-flip-left
+    flip-left
     Another 3D effect, but in this case the right side of the slide is lifted up and the slide is flipped over to the left, revealing the new slide on the back side.
-center-out
+    center-out
     A small circle appears in the middle of the old slide that reveals the new slide. The circle grows until it covers the whole slide.
-wipe-left
+    wipe-left
     The new slide moves in from the right, until it covers the old slide.
-zigzag-left
+    zigzag-left
     A zigzag pattern moves in from the right. To the left is the old slide, to the right the new one.
-zigzag-right
+    zigzag-right
     A zigzag pattern moves in from the left. To the left is the new slide, to the right the old one.
-cut-in
+    cut-in
     The new slide moves in from the top left and covers the old slide. 
--->
-
-
- <body class="fade-in hidemouse=1.5">
-
-  <div class=progress></div> <!-- progress bar -->
-
-  <section role=region aria-live=assertive>
-    <!-- What a screen reader should say on leaving slide mode,
-	 instead of the default ‘Stopped.’ -->
-    Leaving presentation mode.
-  </section>
-
-  <section class="comment small timer">
-    <span class="timer-text"></span>
-    <button class="timer-start">Empezar</button>
-  </section>
-  <script>
-    let time_mins = 50
-    let setMins = function(){
-      document.querySelector(".timer-text").textContent = `${time_mins} min. restantes`;
-      time_mins -= 1;
-    }
-    setMins()
-    document.querySelector(".timer-start").addEventListener("click", function(){
-      this.style.display = "none";
-      setInterval(setMins, 60000)
-    });
-    
-  </script>
-
-  <section class="comment small">
-
-    Para iniciar la presentación, haz <a href="?full">clic aquí</a> o <b>doble clic</b> en cualquiera de las diapositivas. Para navegar por las diapositivas, puedes utilizar las flechas del teclado.
-    <p>
-      Esta presentación ha sido compuesta utilizando el <a href="https://www.w3.org/Talks/Tools/b6plus/">motor B6+ del W3C</a>, con scripts y estilos modificados por David Charte. Consulta el <a href="https://github.com/fdavidcl/defensa">código fuente en GitHub</a>.
-    </p>
-  </section>
-
-  <section class="cover slide clear titleslide flex" id=cover>
-    <div class="right-side">
-      <img class="cover" src="images/fondo_portada.png"
-      alt="Abstract nodes and connections" />
-      <h1>
-        Aplicaciones del <br>
-        <span class="largest"><i>Deep Learning</i> </span><br>
-        <span class="larger">al análisis de imágenes</span><br>
-      </h1>
-      <p class="subtitle">Décimo Ciclo de Conferencias de Enseñanzas de Postgrado</p>
-      <p class="institution">Máster Universitario en Ingeniería Informática<br>&nbsp;</p>
-      <p class=note>27 de marzo de 2023<br>
-    </div>
-  </section>
-
-  <div class="slide clear anchor-bottom" id="about">
-    <h1>¿Quién soy?</h1>
-    <div class="author">
-      <img src="https://avatars.githubusercontent.com/u/909629?v=4" class="avatar">
-      <div>
-        <p class="name">David Charte</p>
-        <a href="mailto:david@deivi.ch" >&lt;david@deivi.ch&gt;</a>
-        <ul>
-          <li>Informático y matemático</li>
-          <li>Doctor en TIC</li>
-          <li>(Ex-)docente en la UGR</li>
-          <li>Co-fundador de  <a href="https://libreim.github.io"><img src="https://libreim.github.io/assets/images/logo.png" alt="Logo LibreIM" style="height:1em; display: inline; vertical-align: top"> LibreIM</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="space"></div>
-    <div class="box" style="font-size: 1.2rem">Sigue la presentación en <strong><a href="https://deivi.ch/dl/">deivi.ch/dl/</a></strong></div>
-  </div>
-
-  <section class="slide clear" id="toc">
-    <h1>Índice</h1>
-    <ol class="maketoc"></ol>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <!-- <div class="box next">Sigue la presentación en <a href="https://deivi.ch/defensa">deivi.ch/defensa</a></div> -->
-  </section>
-
-  <section class="cover slide clear " id="teoria">
-    <img class="cover" src="images/fondo_portada.png"
-    alt="Abstract nodes and connections" />
-    <h1>La teoría</h1>
-  </section>
+  -->
   
-  <section id="moti1" class="slide fade-in">
-    <h1>Motivación</h1>
-    <div class="box secondary">
-      <strong>Objetivo</strong><br>
-      Queremos un modelo que generalice una serie de puntos
-    </div><p></p>
-    <strong>Idea:</strong> interpolar los puntos con funciones "simples"
-    <div class="incremental in-place">
-
-      <div class="flex">
-        <img src="images/initial.png" style="max-height: 300px;">
-        <p>$$f(x)=A+Bx$$</p>
-      </div>
-      <div class="flex">
-        <img src="images/arriba.gif" style="max-height: 300px;">
-        <p>$$f(x)=A+Bx+Cx^2+Dx^3+Ex^4$$</p>
-      </div>
-      <div class="flex">
-        <img src="images/abajo.gif" style="max-height: 300px;">
-        <p>$$f(x)=A+Bx+Cx^2+Dx^3+Ex^4$$</p>
-      </div>
-    </div>
-  </section>
-  <section id="moti4" class="slide">
-    <img src="images/interp_vs_aprox.png" style="max-height: 440px;">
-  </section>
-  <section id="moti5" class="slide">
-      <img src="images/chad.png" style="max-height: 380px;">
-      <p class="center">
-        \(f(x)=A+Bx\) ...ajustando \(A,B\) para <em>mínimo error</em>
-      </p>
-  </section>
-  <section id="moti6" class="slide">
-      <img src="images/plano.png" style="max-height: 380px;">
-      <p class="center">
-        \(f(x_1,x_2)=A+Bx_1+Cx_2\) ...ajustando \(A,B,C\) para <em>mínimo error</em>
-      </p>
-  </section>
-  <section id="moti7" class="slide fade-in">
-    <p class="center"><strong>¿Más variables?</strong></p>
-      <p class="center">
-        \(\displaystyle f(\textbf{x})=\sum_i w_i\textbf{x}_i\) ...ajustando \(w_i\) para <em>mínimo error</em>
-      </p>
-      <div class="incremental in-place">
-        <img src="images/imagination" style="max-height: 300px;">
-        <div>
-          <img src="images/neurona.svg" />
-          <p class="shout center next">"neurona"</p>
-        </div>
-      </div>
-  </section>
-  <section id="moti8" class="slide">
-    <h1>Construyendo una red (paso 1)</h1>
-    <div class="flex">
-      <div class="incremental">
-        <div><strong>Más neuronas</strong><p></p></div>
-        <div>$$\begin{align}f(\textbf{x})&=W\textbf{x}\\W&=\begin{pmatrix}w_{11}&w_{12}&\dots&w_{1n}\\w_{21}&w_{22}&\dots&w_{2n}\\w_{31}&w_{32}&\dots&w_{3n}\\\vdots&\vdots&\ddots&\vdots\\w_{m1}&w_{m2}&\dots&w_{mn}\end{pmatrix}\end{align}$$<p></p>
-        </div>
-        <div class="shout center">"capa"</div>
-      </div>
-      <img src="images/capa.svg" style="height: 380px" />
-    </div>
-  </section>
-  <section id="moti9" class="slide">
-    <h1>Construyendo una red (paso 2)</h1>
-    <div class="flex">
-      <div class="incremental">
-        <strong>Más capas</strong><span>\(f(\textbf{x})=W''(W'(W\textbf{x}))\)</span>
-      </div>
-      <img src="images/reddensa.svg" style="height: 340px" />
-    </div>
-  </section>
-  <section id="moti9.5" class="slide">
-    <h1>Falta algo...</h1>
-    <div class="incremental flex">
-      <img src="images/outputlineal.png" style="width: 50%;" />
-      <div class="center" style="width: 30%; flex-grow: 0;">
-        <img src="images/fry.png" />
-        <p></p><strong>Demasiado lineal</strong>
-      </div>
-    </div>
-  </section>
-  <section id="moti10" class="slide">
-    <h1>Construyendo una red (paso 3)</h1>
-    <div class="incremental">
-      <p><strong>Funciones de activación</strong><span>\(f(\textbf{x})=\sigma''(W''\sigma'(W'\sigma(W\textbf{x})))\) con \(\sigma\) <em>no lineal</em>, p.ej:</span></p>
-      <img src="images/activaciones.png" style="height: 340px" />
-    </div>
-  </section>
-  <section id="moti11" class="slide">
-    <iframe src="https://codesandbox.io/embed/neuralnet-playground-plotly-ud15yt?fontsize=14&hidenavigation=1&theme=dark"
-     style="width:100%; height:430px; border:0; border-radius: 4px; overflow:hidden;"
-     title="neuralnet-playground-plotly"
-   ></iframe>
-  </section>
-  <section id="moti11-5" class="slide cover">
-    <img src="images/uniaprox1.png" class="periodico primero">
-    <img src="images/uniaprox3.png" class="periodico tercero">
-    <img src="images/uniaprox2.png" class="periodico segundo">
-  </section>
-
-  <section id="moti12" class="slide">
-    <h1>Resumen</h1>
-    <div class="incremental in-place">
-      <img src="images/supernenas1.png" style="height: 380px">
-      <img src="images/supernenas2.png" style="height: 380px">
-      <img src="images/supernenas3.png" style="height: 380px">
-      <img src="images/supernenas4.png" style="height: 380px">
-    </div>
-  </section>
-  <section id="moti13" class="slide">
-    <h1>Hay que entrenar!</h1>
-    <div class="flex stretch incremental">
-      <div class="box secondary">
-        <h2>1. <i>Forward pass</i></h2>
-        <p><strong>Propagar hacia adelante:</strong> Computar la salida de la red para unos datos</p>
-      </div>
-      <div class="box">
-        <h2>2. Calcular error</h2>
-        <p><strong>Funciones de error:</strong> Comparar la salida de la red con la deseada</p>
-      </div>
-      <div class="box">
-        <h2>3. <i>Backprop</i></h2>
-        <p><strong>Propagación hacia atrás:</strong> Técnica para calcular las derivadas del error respecto de cada parámetro</p>
-      </div>
-      <div class="box">
-        <h2>4. SGD</h2>
-        <p><strong>Descenso del gradiente estocástico:</strong> Estrategia para optimizar los parámetros buscando el mínimo error</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide" id="moti14">
-    <h1>¿Ya está?</h1>
-    <div class="incremental">
-      <div class="shout center"><b>casi.</b></div>
-      <p>¿Y si tenemos <strong>datos estructurados</strong>?</p>
-    </div>
-    <div class="flex stretch">
-      <div class="box secondary next">
-        <h2>Texto y señales</h2>
-        <ul class="left">
-          <li>Unidades recurrentes: LSTM, GRU</li>
-          <li>Transformers (<strong>GPT</strong>!)</li>
-        </ul>
-      </div>
-      <div class="box next">
-        <h2>Imágenes y vídeo</h2>
-        <ul class="left">
-          <li>Redes convolucionales</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <div id="cnn" class="slide cover clear">
-    <img class="cover" src="images/fondo_portada.png"
-    alt="Abstract nodes and connections" />
-    <h1>Redes convolucionales</h1>
-  </div>
-
-  <section id="cnn1" class="slide">
-    <h1>Operación de convolución</h1>
-    <img src="images/cnn.gif" alt="Capa convolucional" style="margin: -4rem auto;">
-    <p class="center">
-      \(W\) es <strong>más pequeña</strong> que en la capa densa \(\Rightarrow\) mejor rendimiento con menos parámetros
-    </p>
-  </section>
-
-  <section id="cnn2" class="slide">
-    <h1>Filtros convolucionales</h1>
-    <div class="flex">
-      <img src="images/kernel.png" alt="Efectos de diferentes kernels en una misma fotografía">
-      <div class="box">En la red convolucional, los <i>kernels</i> se aprenden entrenando</div>
-    </div>
-  </section>
-
-  <div id="cnn3" class="slide">
-    <h1>Estructura de una red</h1>
-    <p>En general, <strong>3 opciones</strong>:</p>
-    <div class="flex stretch">
-      <div class="box secondary">
-        <img src="images/encoder.svg" alt="Encoder imagen->código">
-      </div>
-      <div class="box secondary">
-        <img src="images/decoder.svg" alt="Encoder imagen->código">
-      </div>
-      <div class="box secondary">
-        <img src="images/encdec.svg" alt="Encoder imagen->código">
-      </div>
-    </div>
-  </div>
-
-  <div id="cnn6-1" class="slide anchor-bottom">
-    <h1>Estructura de una red</h1>
-    <div class="space"></div>
-    <div class="flex narrow">
-      <div style="flex-grow: 0">
-        <img src="images/encoder.svg" alt="Encoder imagen->código">
-        <p class="center"><strong>Encoder</strong></p>
-        <ul>
-          <li>Clasificación</li>
-          <li>Regresión</li>
-          <li>Detección de objetos</li>
-        </ul>
-      </div>
-      <div>
-        <img src="images/yolo.png" alt="YOLO">
-      </div>
-    </div>
-    <div class="space"></div>
-  </div>
-
-  <div id="cnn6-2" class="slide anchor-bottom">
-    <h1>Estructura de una red</h1>
-    <div class="space"></div>
-    <div class="flex narrow">
-      <div style="flex-grow: 0">
-        <img src="images/decoder.svg" alt="Decoder código->imagen">
-        <p class="center"><strong>Decoder</strong></p>
-        <ul>
-          <li>Generación</li>
-        </ul>
-      </div>
-      <div>
-        <img src="images/stylegan.png" alt="StyleGAN">
-      </div>
-    </div>
-    <div class="space"></div>
-  </div>
-
-  <div id="cnn6-3" class="slide anchor-bottom">
-    <h1>Estructura de una red</h1>
-    <div class="space"></div>
-    <div class="flex narrow">
-      <div >
-        <img src="images/encdec.svg" alt="Encoder-decoder">
-      </div>
-      <div>
-        <p class="center"><strong>Encoder-decoder</strong></p>
-        <ul>
-          <li>Segmentación</li>
-          <li>Cambio de estilo</li>
-          <li>...</li>
-        </ul>
-      </div>
-    </div>
-      <div>
-        <img src="images/segmentation.png" alt="Ejemplo segmentación">
-      </div>
-    <div class="space"></div>
-  </div>
-
-  <div id="cnn7" class="slide">
-    <h1>Operaciones comunes</h1>
-    <div class="flex stretch incremental">
-      <div class="box secondary">
-        <div class="flex nowrap">
-          <div>
-            <h2>Convolución</h2>
-            <p>Extraer características a partir de imágenes</p>
-          </div>
-          <img src="images/convop.gif" alt="Convolución" style="width: 3em;">
-        </div>
-      </div>
-      <div class="box secondary">
-        <div class="flex nowrap">
-          <div>
-            <h2><i>Pooling</i></h2>
-            <p>Reducir el ancho y alto de los filtros</p>
-          </div>
-          <img src="images/convstrides.gif" alt="Agregación" style="width: 3em;">
-        </div>
-      </div>
-      <div class="box secondary">
-        <div class="flex nowrap">
-          <div>
-            <h2>Convolución traspuesta</h2>
-            <p>Operación inversa de la convolución</p>
-          </div>
-          <img src="images/deconv.gif" alt="Deconvolución" style="width: 3em;">
-        </div>
-      </div>
-      <div class="box secondary">
-        <div class="flex nowrap">
-          <div>
-            <h2><i>Skip connections</i></h2>
-            <p>Recuperar información de pasos previos</p>
-          </div>
-          <img src="images/skipcon.png" alt="Skip connection" style="width: 3em;">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="cnn4" class="slide">
-    <h1>Ejemplos (I)</h1>
-    <img src="images/vgg16.png" alt="VGG-16">
-    <p class="center">VGG-16 para clasificación/detección</p>
-  </div>
-
-  <div id="cnn5" class="slide">
-    <h1>Ejemplos (II)</h1>
-    <img src="images/dcgan.png" alt="DCGAN">
-    <p class="center">DCGAN: <i>deep convolutional generative adversarial network</i></p>
-  </div>
-
-  <div id="cnn6" class="slide">
-    <h1>Ejemplos (III)</h1>
-    <img src="images/unet.png" alt="DCGAN" style="height: 21em">
-    <p class="center">UNet para segmentación</p>
-  </div>
-
-  <div class="slide cover clear" id="impl">
-    <img class="cover" src="images/fondo_portada.png"
-    alt="Abstract nodes and connections" />
-    <h1>Implementación</h1>
-  </div>
-
-  <div class="slide anchor-bottom" id="impl1">
-    <h1>Lenguajes de programación</h1>
-    <div class="space"></div>
-    <div class="flex incremental stretch">
-      <div class="box secondary">
-        <p><img src="images/Python.svg" alt="Logo Python"></p>
-        <p><strong>Python</strong></p>
-      </div>
-      <div class="box secondary">
-        <p>
-          <img src="images/c++.svg" alt="Logo C++" style="width:30%; margin: 0 .4rem; display: inline-block;">
-          <img src="images/js.png" alt="Logo JavaScript" style="width:30%; margin: 0 .4rem; display: inline-block;">
-          <img src="images/r.svg" alt="Logo R" style="width:30%; margin: 0 .4rem; display: inline-block;">
-          <img src="images/julia.svg" alt="Logo Julia" style="width:30%; margin: 0 .4rem; display: inline-block;">
-        </p>
-      </div>
-    </div>
-    <div class="space"></div>
-    <div class="space"></div>
-  </div>
-
-  <div class="slide anchor-bottom" id="impl2">
-    <h1>Frameworks</h1>
-    <div class="flex incremental ultranarrow stretch" style="margin: 0 5rem; gap: .5rem">
-      <div class="box secondary">
-        <p><strong>TensorFlow</strong></p>
-        <p><img src="images/tf.png" alt="Logo Tensorflow"></p>
-      </div>
-      <div class="box secondary">
-        <p><strong>Pytorch</strong></p>
-        <img src="images/pytorch.png" alt="Logo Pytorch">
-      </div>
-      <div class="box secondary">
-        <p>
-          <img src="images/mxnet.png" alt="Logo MXNet">
-          <img src="images/jax.png" alt="Logo Jax">
-          <img src="images/flux.png" alt="Logo Flux">
-        </p>
-      </div>
-    </div>
-    <div class="space"></div>
-    <img src="images/library_trends.png" class="next" alt="Google trends para Tensorflow, Pytorch y otras bibliotecas"> 
-  </div>
-
-
-  <div class="slide cover clear" id="impl3">
-    <div class="incremental in-place">
-      <img src="images/isthisatensor.jpg" alt="Any matrix. Is this a tensor?"> 
-      <img src="images/tensors.png" alt="95 páginas de tensores en Wikipedia"> 
-    </div>
-    
-  </div>
-
   
-  <div id="impl4" class="slide">
-    <p class="center"><img src="images/vgg16.png" alt="VGG-16" style="height: 5em; display: inline-block;">
-    <img src="images/Python.svg" alt="Logo Python" style="height: 5em; display: inline-block;">
-    <img src="images/tf.png" alt="Logo Tensorflow" style="height: 5em; display: inline-block;"></p>
-    <pre>
-<code style="max-height: 19em; overflow: auto;"># Block 1
+  <body class="fade-in hidemouse=1.5">
+    
+    <div class=progress></div> <!-- progress bar -->
+    
+    <section role=region aria-live=assertive>
+      <!-- What a screen reader should say on leaving slide mode,
+        instead of the default ‘Stopped.’ -->
+        Leaving presentation mode.
+      </section>
+      
+      <section class="comment small timer">
+        <span class="timer-text"></span>
+        <button class="timer-start">Empezar</button>
+      </section>
+      <script>
+        let time_mins = 50
+        let setMins = function(){
+          document.querySelector(".timer-text").textContent = `${time_mins} min. restantes`;
+          time_mins -= 1;
+        }
+        setMins()
+        document.querySelector(".timer-start").addEventListener("click", function(){
+          this.style.display = "none";
+          setInterval(setMins, 60000)
+        });
+        
+      </script>
+      
+      <section class="comment small">
+        
+        Para iniciar la presentación, haz <a href="?full">clic aquí</a> o <b>doble clic</b> en cualquiera de las diapositivas. Para navegar por las diapositivas, puedes utilizar las flechas del teclado.
+        <p>
+          Esta presentación ha sido compuesta utilizando el <a href="https://www.w3.org/Talks/Tools/b6plus/">motor B6+ del W3C</a>, con scripts y estilos modificados por David Charte. Consulta el <a href="https://github.com/fdavidcl/defensa">código fuente en GitHub</a>.
+        </p>
+      </section>
+      
+      <section class="cover slide clear titleslide flex" id=cover>
+        <div class="right-side">
+          <img class="cover" src="images/fondo_portada.png"
+          alt="Abstract nodes and connections" />
+          <h1>
+            Aplicaciones del <br>
+            <span class="largest"><i>Deep Learning</i> </span><br>
+            <span class="larger">al análisis de imágenes</span><br>
+          </h1>
+          <p class="subtitle">Décimo Ciclo de Conferencias de Enseñanzas de Postgrado</p>
+          <p class="institution">Máster Universitario en Ingeniería Informática<br>&nbsp;</p>
+          <p class=note>27 de marzo de 2023<br>
+          </div>
+        </section>
+        
+        <div class="slide clear anchor-bottom" id="about">
+          <h1>¿Quién soy?</h1>
+          <div class="author">
+            <img src="https://avatars.githubusercontent.com/u/909629?v=4" class="avatar">
+            <div>
+              <p class="name">David Charte</p>
+              <a href="mailto:david@deivi.ch" >&lt;david@deivi.ch&gt;</a>
+              <ul>
+                <li>Informático y matemático</li>
+                <li>Doctor en TIC</li>
+                <li>(Ex-)docente en la UGR</li>
+                <li>Co-fundador de  <a href="https://libreim.github.io"><img src="https://libreim.github.io/assets/images/logo.png" alt="Logo LibreIM" style="height:1em; display: inline; vertical-align: top"> LibreIM</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="space"></div>
+          <div class="box" style="font-size: 1.2rem">Sigue la presentación en <strong><a href="https://deivi.ch/dl/">deivi.ch/dl/</a></strong></div>
+        </div>
+        
+        <section class="slide clear" id="toc">
+          <h1>Índice</h1>
+          <ol class="maketoc"></ol>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <!-- <div class="box next">Sigue la presentación en <a href="https://deivi.ch/defensa">deivi.ch/defensa</a></div> -->
+        </section>
+        
+        <section class="cover slide clear " id="teoria">
+          <img class="cover" src="images/fondo_portada.png"
+          alt="Abstract nodes and connections" />
+          <h1>La teoría</h1>
+        </section>
+        
+        <section id="moti1" class="slide fade-in">
+          <h1>Motivación</h1>
+          <div class="box secondary">
+            <strong>Objetivo</strong><br>
+            Queremos un modelo que generalice una serie de puntos
+          </div><p></p>
+          <strong>Idea:</strong> interpolar los puntos con funciones "simples"
+          <div class="incremental in-place">
+            
+            <div class="flex">
+              <div>
+                <img src="images/initial.png" style="max-height: 300px;">
+              </div>
+              <p>$$f(x)=A+Bx$$</p>
+            </div>
+            <div class="flex">
+              <div>
+                <img src="images/arriba.gif" style="max-height: 300px;">
+              </div>
+              <p>$$f(x)=A+Bx+Cx^2+Dx^3+Ex^4$$</p>
+            </div>
+            <div class="flex">
+              <div>
+                <img src="images/abajo.gif" style="max-height: 300px;">
+              </div>
+              <p>$$f(x)=A+Bx+Cx^2+Dx^3+Ex^4$$</p>
+            </div>
+          </div>
+        </section>
+        <section id="moti4" class="slide">
+          <img src="images/interp_vs_aprox.png" style="max-height: 440px;">
+        </section>
+        <section id="moti5" class="slide">
+          <img src="images/chad.png" style="max-height: 380px;">
+          <p class="center">
+            \(f(x)=A+Bx\) ...ajustando \(A,B\) para <em>mínimo error</em>
+          </p>
+        </section>
+        <section id="moti6" class="slide">
+          <img src="images/plano.png" style="max-height: 380px;">
+          <p class="center">
+            \(f(x_1,x_2)=A+Bx_1+Cx_2\) ...ajustando \(A,B,C\) para <em>mínimo error</em>
+          </p>
+        </section>
+        <section id="moti7" class="slide fade-in">
+          <p class="center"><strong>¿Más variables?</strong></p>
+          <p class="center">
+            \(\displaystyle f(\textbf{x})=\sum_i w_i\textbf{x}_i\) ...ajustando \(w_i\) para <em>mínimo error</em>
+          </p>
+          <div class="incremental in-place">
+            <img src="images/imagination" style="max-height: 300px;">
+            <div>
+              <img src="images/neurona.svg" />
+              <p class="shout center next">"neurona"</p>
+            </div>
+          </div>
+        </section>
+        <section id="moti8" class="slide">
+          <h1>Construyendo una red (paso 1)</h1>
+          <div class="flex">
+            <div class="incremental">
+              <div><strong>Más neuronas</strong><p></p></div>
+              <div>$$\begin{align*}f(\textbf{x})&=W\textbf{x}\\W&=\begin{pmatrix}w_{11}&w_{12}&\dots&w_{1n}\\w_{21}&w_{22}&\dots&w_{2n}\\w_{31}&w_{32}&\dots&w_{3n}\\\vdots&\vdots&\ddots&\vdots\\w_{m1}&w_{m2}&\dots&w_{mn}\end{pmatrix}\end{align*}$$<p></p>
+              </div>
+              <div class="shout center">"capa"</div>
+            </div>
+            <img src="images/capa.svg" style="height: 380px" />
+          </div>
+        </section>
+        <section id="moti9" class="slide">
+          <h1>Construyendo una red (paso 2)</h1>
+          <div class="flex">
+            <div class="incremental">
+              <strong>Más capas</strong><span>\(f(\textbf{x})=W''(W'(W\textbf{x}))\)</span>
+            </div>
+            <img src="images/reddensa.svg" style="height: 340px" />
+          </div>
+        </section>
+        <section id="moti9.5" class="slide">
+          <h1>Falta algo...</h1>
+          <div class="incremental flex">
+            <img src="images/outputlineal.png" style="width: 50%;" />
+            <div class="center" style="width: 30%; flex-grow: 0;">
+              <img src="images/fry.png" />
+              <p></p><strong>Demasiado lineal</strong>
+            </div>
+          </div>
+        </section>
+        <section id="moti10" class="slide">
+          <h1>Construyendo una red (paso 3)</h1>
+          <div class="incremental">
+            <p><strong>Funciones de activación</strong><span>\(f(\textbf{x})=\sigma''(W''\sigma'(W'\sigma(W\textbf{x})))\) con \(\sigma\) <em>no lineal</em>, p.ej:</span></p>
+            <img src="images/activaciones.png" style="height: 340px" />
+          </div>
+        </section>
+        <section id="moti11" class="slide">
+          <iframe src="https://codesandbox.io/embed/neuralnet-playground-plotly-ud15yt?fontsize=14&hidenavigation=1&theme=dark"
+          style="width:100%; height:430px; border:0; border-radius: 4px; overflow:hidden;"
+          title="neuralnet-playground-plotly"
+          ></iframe>
+        </section>
+        <section id="moti11-5" class="slide cover">
+          <img src="images/uniaprox1.png" class="periodico primero">
+          <img src="images/uniaprox3.png" class="periodico tercero">
+          <img src="images/uniaprox2.png" class="periodico segundo">
+        </section>
+        
+        <section id="moti12" class="slide">
+          <h1>Resumen</h1>
+          <div class="incremental in-place">
+            <img src="images/supernenas1.png" style="height: 380px">
+            <img src="images/supernenas2.png" style="height: 380px">
+            <img src="images/supernenas3.png" style="height: 380px">
+            <img src="images/supernenas4.png" style="height: 380px">
+          </div>
+        </section>
+        <section id="moti13" class="slide">
+          <h1>Hay que entrenar!</h1>
+          <div class="flex stretch incremental">
+            <div class="box secondary">
+              <h2>1. <i>Forward pass</i></h2>
+              <p><strong>Propagar hacia adelante:</strong> Computar la salida de la red para unos datos</p>
+            </div>
+            <div class="box">
+              <h2>2. Calcular error</h2>
+              <p><strong>Funciones de error:</strong> Comparar la salida de la red con la deseada</p>
+            </div>
+            <div class="box">
+              <h2>3. <i>Backprop</i></h2>
+              <p><strong>Propagación hacia atrás:</strong> Técnica para calcular las derivadas del error respecto de cada parámetro</p>
+            </div>
+            <div class="box">
+              <h2>4. SGD</h2>
+              <p><strong>Descenso del gradiente estocástico:</strong> Estrategia para optimizar los parámetros buscando el mínimo error</p>
+            </div>
+          </div>
+        </section>
+        
+        <section class="slide" id="moti14">
+          <h1>¿Ya está?</h1>
+          <div class="incremental">
+            <div class="shout center"><b>casi.</b></div>
+            <p>¿Y si tenemos <strong>datos estructurados</strong>?</p>
+          </div>
+          <div class="flex stretch">
+            <div class="box secondary next">
+              <h2>Texto y señales</h2>
+              <ul class="left">
+                <li>Unidades recurrentes: LSTM, GRU</li>
+                <li>Transformers (<strong>GPT</strong>!)</li>
+              </ul>
+            </div>
+            <div class="box next">
+              <h2>Imágenes y vídeo</h2>
+              <ul class="left">
+                <li>Redes convolucionales</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+        <div id="cnn" class="slide cover clear">
+          <img class="cover" src="images/fondo_portada.png"
+          alt="Abstract nodes and connections" />
+          <h1>Redes convolucionales</h1>
+        </div>
+        
+        <section id="cnn1" class="slide">
+          <h1>Operación de convolución</h1>
+          <img src="images/cnn.gif" alt="Capa convolucional" style="margin: -4rem auto;">
+          <p class="center">
+            \(W\) es <strong>más pequeña</strong> que en la capa densa \(\Rightarrow\) mejor rendimiento con menos parámetros
+          </p>
+        </section>
+        
+        <section id="cnn2" class="slide">
+          <h1>Filtros convolucionales</h1>
+          <div class="flex">
+            <img src="images/kernel.png" alt="Efectos de diferentes kernels en una misma fotografía">
+            <div class="box">En la red convolucional, los <i>kernels</i> se aprenden entrenando</div>
+          </div>
+        </section>
+        
+        <div id="cnn3" class="slide">
+          <h1>Estructura de una red</h1>
+          <p>En general, <strong>3 opciones</strong>:</p>
+          <div class="flex stretch">
+            <div class="box secondary">
+              <img src="images/encoder.svg" alt="Encoder imagen->código">
+            </div>
+            <div class="box secondary">
+              <img src="images/decoder.svg" alt="Encoder imagen->código">
+            </div>
+            <div class="box secondary">
+              <img src="images/encdec.svg" alt="Encoder imagen->código">
+            </div>
+          </div>
+        </div>
+        
+        <div id="cnn6-1" class="slide anchor-bottom">
+          <h1>Estructura de una red</h1>
+          <div class="space"></div>
+          <div class="flex narrow">
+            <div style="flex-grow: 0">
+              <img src="images/encoder.svg" alt="Encoder imagen->código">
+              <p class="center"><strong>Encoder</strong></p>
+              <ul>
+                <li>Clasificación</li>
+                <li>Regresión</li>
+                <li>Detección de objetos</li>
+              </ul>
+            </div>
+            <div>
+              <img src="images/yolo.png" alt="YOLO">
+            </div>
+          </div>
+          <div class="space"></div>
+        </div>
+        
+        <div id="cnn6-2" class="slide anchor-bottom">
+          <h1>Estructura de una red</h1>
+          <div class="space"></div>
+          <div class="flex narrow">
+            <div style="flex-grow: 0">
+              <img src="images/decoder.svg" alt="Decoder código->imagen">
+              <p class="center"><strong>Decoder</strong></p>
+              <ul>
+                <li>Generación</li>
+              </ul>
+            </div>
+            <div>
+              <img src="images/stylegan.png" alt="StyleGAN">
+            </div>
+          </div>
+          <div class="space"></div>
+        </div>
+        
+        <div id="cnn6-3" class="slide anchor-bottom">
+          <h1>Estructura de una red</h1>
+          <div class="space"></div>
+          <div class="flex narrow">
+            <div >
+              <img src="images/encdec.svg" alt="Encoder-decoder">
+            </div>
+            <div>
+              <p class="center"><strong>Encoder-decoder</strong></p>
+              <ul>
+                <li>Segmentación</li>
+                <li>Cambio de estilo</li>
+                <li>...</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <img src="images/segmentation.png" alt="Ejemplo segmentación">
+          </div>
+          <div class="space"></div>
+        </div>
+        
+        <div id="cnn7" class="slide">
+          <h1>Operaciones comunes</h1>
+          <div class="flex stretch incremental">
+            <div class="box secondary">
+              <div class="flex nowrap">
+                <div>
+                  <h2>Convolución</h2>
+                  <p>Extraer características a partir de imágenes</p>
+                </div>
+                <img src="images/convop.gif" alt="Convolución" style="width: 3em;">
+              </div>
+            </div>
+            <div class="box secondary">
+              <div class="flex nowrap">
+                <div>
+                  <h2><i>Pooling</i></h2>
+                  <p>Reducir el ancho y alto de los filtros</p>
+                </div>
+                <img src="images/convstrides.gif" alt="Agregación" style="width: 3em;">
+              </div>
+            </div>
+            <div class="box secondary">
+              <div class="flex nowrap">
+                <div>
+                  <h2>Convolución traspuesta</h2>
+                  <p>Operación inversa de la convolución</p>
+                </div>
+                <img src="images/deconv.gif" alt="Deconvolución" style="width: 3em;">
+              </div>
+            </div>
+            <div class="box secondary">
+              <div class="flex nowrap">
+                <div>
+                  <h2><i>Skip connections</i></h2>
+                  <p>Recuperar información de pasos previos</p>
+                </div>
+                <img src="images/skipcon.png" alt="Skip connection" style="width: 3em;">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="cnn4" class="slide">
+          <h1>Ejemplos (I)</h1>
+          <img src="images/vgg16.png" alt="VGG-16">
+          <p class="center">VGG-16 para clasificación/detección</p>
+        </div>
+        
+        <div id="cnn5" class="slide">
+          <h1>Ejemplos (II)</h1>
+          <img src="images/dcgan.png" alt="DCGAN">
+          <p class="center">DCGAN: <i>deep convolutional generative adversarial network</i></p>
+        </div>
+        
+        <div id="cnn6" class="slide">
+          <h1>Ejemplos (III)</h1>
+          <img src="images/unet.png" alt="DCGAN" style="height: 21em">
+          <p class="center">UNet para segmentación</p>
+        </div>
+        
+        <div class="slide cover clear" id="impl">
+          <img class="cover" src="images/fondo_portada.png"
+          alt="Abstract nodes and connections" />
+          <h1>Implementación</h1>
+        </div>
+        
+        <div class="slide anchor-bottom" id="impl1">
+          <h1>Lenguajes de programación</h1>
+          <div class="space"></div>
+          <div class="flex incremental stretch">
+            <div class="box secondary">
+              <p><img src="images/Python.svg" alt="Logo Python"></p>
+              <p><strong>Python</strong></p>
+            </div>
+            <div class="box secondary">
+              <p>
+                <img src="images/c++.svg" alt="Logo C++" style="width:30%; margin: 0 .4rem; display: inline-block;">
+                <img src="images/js.png" alt="Logo JavaScript" style="width:30%; margin: 0 .4rem; display: inline-block;">
+                <img src="images/r.svg" alt="Logo R" style="width:30%; margin: 0 .4rem; display: inline-block;">
+                <img src="images/julia.svg" alt="Logo Julia" style="width:30%; margin: 0 .4rem; display: inline-block;">
+              </p>
+            </div>
+          </div>
+          <div class="space"></div>
+          <div class="space"></div>
+        </div>
+        
+        <div class="slide anchor-bottom" id="impl2">
+          <h1>Frameworks</h1>
+          <div class="flex incremental ultranarrow stretch" style="margin: 0 5rem; gap: .5rem">
+            <div class="box secondary">
+              <p><strong>TensorFlow</strong></p>
+              <p><img src="images/tf.png" alt="Logo Tensorflow"></p>
+            </div>
+            <div class="box secondary">
+              <p><strong>Pytorch</strong></p>
+              <img src="images/pytorch.png" alt="Logo Pytorch">
+            </div>
+            <div class="box secondary">
+              <p>
+                <img src="images/mxnet.png" alt="Logo MXNet">
+                <img src="images/jax.png" alt="Logo Jax">
+                <img src="images/flux.png" alt="Logo Flux">
+              </p>
+            </div>
+          </div>
+          <div class="space"></div>
+          <img src="images/library_trends.png" class="next" alt="Google trends para Tensorflow, Pytorch y otras bibliotecas"> 
+        </div>
+        
+        
+        <div class="slide cover clear" id="impl3">
+          <div class="incremental in-place">
+            <img src="images/isthisatensor.jpg" alt="Any matrix. Is this a tensor?"> 
+            <img src="images/tensors.png" alt="95 páginas de tensores en Wikipedia"> 
+          </div>
+          
+        </div>
+        
+        
+        <div id="impl4" class="slide">
+          <p class="center"><img src="images/vgg16.png" alt="VGG-16" style="height: 5em; display: inline-block;">
+            <img src="images/Python.svg" alt="Logo Python" style="height: 5em; display: inline-block;">
+            <img src="images/tf.png" alt="Logo Tensorflow" style="height: 5em; display: inline-block;"></p>
+            <pre><code style="max-height: 19em; overflow: auto;"># Block 1
 x = Conv2D(64, (3, 3), activation="relu", padding="same", name="block1_conv1")(img_input)
 x = Conv2D(64, (3, 3), activation="relu", padding="same", name="block1_conv2")(x)
 x = MaxPooling2D((2, 2), strides=(2, 2), name="block1_pool")(x)
@@ -528,244 +534,256 @@ x = Flatten(name="flatten")(x)
 x = Dense(4096, activation="relu", name="fc1")(x)
 x = Dense(4096, activation="relu", name="fc2")(x)
 x = Dense(classes, activation=classifier_activation, name="predictions")(x)
-    </code></pre>
-    <p class="center">Fuente: <a href="https://github.com/keras-team/keras/blob/v2.11.0/keras/applications/vgg16.py#L48">keras-team/keras/keras/applications/vgg16.py</a></p>
-  </div>
-
-  <div id="impl5" class="slide">
-    <h1>Recursos</h1>
-    <div class="incremental in-place">
-      <video src="https://media3.giphy.com/media/ZQBH5pvoyiZSE/giphy.mp4?cid=ecf05e47oiasmlzsa6tjukdfoqn527jyjxsbxej7p12phlka&rid=giphy.mp4&ct=g" autoplay loop playsinline style="width: 100%"></video>
-      <div>
-        <img src="images/gpu.jpg" alt="GPU NVidia gaming" style="height: 20rem">
-        <p class="center"><strong>Tu GPU gaming:</strong> Para modelos pequeños</p>
-      </div>
-      <div>
-        <img src="images/a100.jpg" alt="GPU NVidia A100" style="height: 20rem">
-        <p class="center">NVIDIA A100: <a href="https://github.com/Stability-AI/stablediffusion"><strong>Stable Diffusion</strong></a> se entrenó en una de estas</p>
-      </div>
-      <div>
-        <img src="images/dgxa100.jpg" alt="Servidor NVidia DGX A100" style="height: 20rem">
-        <p class="center">DGX A100: Tiene 8x NVIDIA A100 (hasta <strong>640 GB VRAM!</strong>)</p>
-      </div>
-      
-    </div>
-  </div>
-
-  <div id="apli" class="slide cover clear">
-    <img class="cover" src="images/fondo_portada.png"
-    alt="Abstract nodes and connections" />
-    <h1>Aplicaciones</h1>
-  </div>
-
-  <div id="apli1" class="slide">
-    <h1>Algunas aplicaciones</h1>
-    <div class="flex incremental stretch">
-      <div class="box secondary">
-        <p><strong>Ámbito industrial</strong></p>
-        <ul class="left">
-          <li>Control de calidad</li>
-          <li>Análisis de materiales</li>
-        </ul>
-      </div>
-      <div class="box secondary">
-        <p><strong>Medicina</strong></p>
-        <ul class="left">
-          <li>Asistencia al diagnóstico: TACs, resonancias, radiografías</li>
-        </ul>
-      </div>
-      <div class="box secondary">
-        <img src="images/recaptcha.png" alt="ReCAPTCHA de Google" style="height: 12rem; float: right;">
-        <p><strong>Transporte</strong></p>
-        <ul class="left">
-          <li>Vehículos autónomos</li>
-        </ul>
-      </div>
-      <div class="box secondary">
-        <p><strong>Redes sociales</strong></p>
-        <ul class="left">
-          <li>Etiquetado de personas</li>
-          <li>Detección de lugares</li>
-          <li>Detección de contenido no permitido</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div id="apli2" class="slide anchor-bottom">
-    <h1>Casos de aplicación</h1>
-    <div class="space"></div>
-    <div class="box secondary">
-      <strong>Detección de COVID en radiografías</strong>
-      <p>
-        <i>COVIDGR Dataset and COVID-SDNet Methodology for Predicting COVID-19 Based on Chest X-Ray Images</i>. 
-        S Tabik, A Gomez-Rios, J L Martin-Rodriguez, I Sevillano-Garcia, M Rey-Area, D Charte, E Guirado, J L Suarez, J Luengo, M A Valero-Gonzalez, P Garcia-Villanova, E Olmedo-Sanchez, F Herrera. <a href="https://doi.org/10.1109/jbhi.2020.3037127">10.1109/jbhi.2020.3037127</a>
-      </p>
-    </div>
-    <div class="space"></div>
-    <div class="box secondary">
-      <strong>Identificación de fases del acero</strong>
-      <p>
-        <i>A tutorial on the segmentation of metallographic images: Taxonomy, new
-          MetalDAM dataset, deep learning-based ensemble model, experimental
-          analysis and challenges</i>.
-          J Luengo, R Moreno, I Sevillano, D Charte, A Peláez-Vegas,
-          M Fernández-Moreno, P Mesejo, F Herrera. <a href="https://doi.org/10.1016/j.inffus.2021.09.018">10.1016/j.inffus.2021.09.018</a>
-      </p>
-    </div>
-    <div class="space"></div>
-  </div>
-
-  <div id="apli3" class="slide">
-    <h1>Detección de COVID: datos disponibles</h1>
-    <p class="center">4 tipos de positivo</p>
-    <img src="images/covid1.png" alt="Severidad de síntomas en radiografías" style="height: 22rem">
-  </div>
-
-  <div id="apli4" class="slide">
-    <h1>Preprocesamiento de los datos</h1>
-    <p class="center">Recorte y transformación de clases</p>
-    <img src="images/covidpreproc.png" alt="Recortes y transformaciones" style="height: 22rem">
-  </div>
-
-  <div id="apli4-5" class="slide">
-    <h1>Trabajo previo</h1>
-    <img src="images/covidnetcaps.png" alt="Resultados de COVIDNet y COVID-CAPS" style="">
-    <div class="incremental in-place">
-      <div><img src="images/sorrywhat.jpg" style="height: 18rem"></div>
-      <div class="anchor-bottom">
-        <div class="space"></div>
-        <img src="images/covidx.png" alt="Orígenes de los datos del dataset COVIDx">
-        <div class="space"></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="apli5" class="slide">
-    <h1>Modelo base: ResNet-50</h1>
-    <img src="images/resnet50.png" alt="Modelo ResNet-34">
-  </div>
-
-  <div id="apli6" class="slide">
-    <h1>Explicaciones del modelo</h1>
-    <img src="images/covidgradcam.png" alt="GradCAM para clase positiva" style="height: 10.5rem">
-    <img src="images/covidgradcam2.png" alt="GradCAM para clase negativa" style="height: 11.25rem">
-    <p class="center">Usamos <a href="https://arxiv.org/pdf/1610.02391.pdf"><strong>GradCAM</strong></a> para identificar regiones que activan cada clase</p>
-  </div>
-
-  <div id="apli7" class="slide">
-    <h1>Resultados finales</h1>
-    <img src="images/covidresults.png" alt="Modelo ResNet-34">
-  </div>
-
-  <div id="apli8" class="slide">
-    <h1>Metalografías: datos disponibles</h1>
-    <p class="center">5 fases del material: matriz, austenita, martensita-austenita, precipitado y defectos</p>
-    <p class="center">42 imágenes etiquetadas, <strong>164 sin etiquetar</strong></p>
-    <img src="images/metal1.png" alt="Severidad de síntomas en radiografías" style="max-height: 22rem">
-  </div>
-
-  <div id="apli9" class="slide">
-    <h1>Modelos probados</h1>
-    <div class="incremental in-place">
-      <div>
-        <img src="images/unet2.png" alt="Unet" style="height: 15rem">
-        <p class="center"><strong>UNet</strong></p>
-      </div>
-      <div>
-        <img src="images/pixelnet.png" alt="Pixelnet" style="height: 15rem">
-        <p class="center"><strong>PixelNet</strong></p>
-      </div>
-      <div>
-        <img src="images/fpn.png" alt="FPN" style="height: 20rem">
-        <p class="center"><strong>Feature Pyramid Network</strong></p>
-      </div>
-      <div>
-        <img src="images/usss.png" alt="USSS" style="height: 20rem">
-        <p class="center"><strong>Universal Semi-supervised Segmentation</strong></p>
-      </div>
-    </div>
-  </div>
-
-  <div id="apli9-5" class="slide">
-    <h1>Transfer learning</h1>
-    <img src="images/transfer.png" alt="Loss graph">
-  </div>
-
-  <div id="apli10" class="slide">
-    <h1>Propuesta</h1>
-    <div>
-      <img src="images/amve.png" alt="AMVE" style="height: 20rem">
-      <p class="center"><strong>Artificial Multiview Ensemble</strong></p>
-    </div>
-  </div>
-
-  <div id="conclusiones" class="slide blur">
-    <h1>Moralejas y comentarios</h1>
-    <ul class="incremental">
-      <li>Más vale tener buenos datos que buenos modelos</li>
-      <li>Modelos sin explicaciones no valen de mucho</li>
-      <li><i>Deep Learning</i> no es la panacea: <a href="https://arxiv.org/pdf/2303.01494.pdf">Clustering?</a> <a href="https://catboost.ai/">CatBoost?</a></li>
-      <li>Tener buenos datos bien etiquetados es muy costoso</li>
-      <li>Entrenar muchos modelos es muy costoso</li>
-    </ul>
-    <div class="flex stretch next">
-    <div class="box secondary"><img src="images/openaikenya.png" alt="Exclusive: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic"></div>
-    <div class="box secondary"><img src="images/energyai.png" alt="Training a single AI model can emit as much carbon as five cars in their lifetimes"></div>
-    </div>
-  </div>
-
-  <div class="slide cover clear" id="onemore" style="background-image: linear-gradient(black, black, purple); color: white">
-    <h1 style="font-weight: 100; font-size: 300%">One more thing...</h1>
-  </div>
-
-  <div id="stablediffusion" class="slide">
-    <h1>Stable Diffusion!</h1>
-    <div class="incremental in-place">
-      <div>
-        <img src="images/epicsunset.png" alt="Epic sunset" style="height: 20rem">
-        <p class="center">epic photo of a sunset over a cliff, ocean, dolphins, big tree, realistic</p>
-      </div>
-      <div>
-        <img src="images/stabledif.svg" alt="Diagrama Stable Diffusion">
-        <p class="center">aka <a href="https://beta.dreamstudio.ai/">DreamStudio</a>. Paper: <a href="https://arxiv.org/abs/2303.01494">arxiv.org/abs/2303.01494</a></p>
-      </div>
-    </div>
-    
-  </div>
-
-  <script>
-    (function() {
-      let toc_slide = document.querySelector(".maketoc")
-      let current_section = ""
-      let current_section_id = ""
-      let slides = document.querySelectorAll(".slide")
-
-      for (let i = 0; i < slides.length; ++i) {
-        if (slides[i].classList.contains("cover") && !slides[i].classList.contains("titleslide")) {
-          if (slides[i].querySelector("h1")) {
-            current_section = slides[i].querySelector("h1").textContent;
-            current_section_id = slides[i].id;
-            if (slides[i].classList.contains("noshow")) continue;
-            toc_slide.insertAdjacentHTML('beforeend', `<li><a class=internal href="#${current_section_id}">${current_section}</a></li>`)
-          }
-        } else if (!slides[i].classList.contains("clear")) {
-          slides[i].insertAdjacentHTML('beforeend', `<footer><a class=internal href="#${current_section_id}">${current_section}</a></footer>`)
-        }
-      }
-    })()
-  </script>
-  
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja" crossorigin="anonymous"></script>
-
-  <!-- automatically render math in text elements -->
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"
-      onload="renderMathInElement(document.body);"></script>
-  
-      <link rel="stylesheet"
-      href="assets/css/nord.min.css">
-  <script defer src="assets/js/highlight.min.js"></script>
-  
-  <script>window.addEventListener("load", function() {hljs.highlightAll();})</script>
- </body>
-</html>
+              </code></pre>
+              <p class="center">Fuente: <a href="https://github.com/keras-team/keras/blob/v2.11.0/keras/applications/vgg16.py#L48">keras-team/keras/keras/applications/vgg16.py</a></p>
+            </div>
+            
+            <div id="impl5" class="slide">
+              <h1>Recursos</h1>
+              <div class="incremental in-place">
+                <video src="https://media3.giphy.com/media/ZQBH5pvoyiZSE/giphy.mp4?cid=ecf05e47oiasmlzsa6tjukdfoqn527jyjxsbxej7p12phlka&rid=giphy.mp4&ct=g" autoplay loop playsinline style="width: 100%"></video>
+                <div>
+                  <img src="images/gpu.jpg" alt="GPU NVidia gaming" style="height: 20rem">
+                  <p class="center"><strong>Tu GPU gaming:</strong> Para modelos pequeños</p>
+                </div>
+                <div>
+                  <img src="images/a100.jpg" alt="GPU NVidia A100" style="height: 20rem">
+                  <p class="center">NVIDIA A100: <a href="https://github.com/Stability-AI/stablediffusion"><strong>Stable Diffusion</strong></a> se entrenó en una de estas</p>
+                </div>
+                <div>
+                  <img src="images/dgxa100.jpg" alt="Servidor NVidia DGX A100" style="height: 20rem">
+                  <p class="center">DGX A100: Tiene 8x NVIDIA A100 (hasta <strong>640 GB VRAM!</strong>)</p>
+                </div>
+                
+              </div>
+            </div>
+            
+            <div id="apli" class="slide cover clear">
+              <img class="cover" src="images/fondo_portada.png"
+              alt="Abstract nodes and connections" />
+              <h1>Aplicaciones</h1>
+            </div>
+            
+            <div id="apli1" class="slide">
+              <h1>Algunas aplicaciones</h1>
+              <div class="flex incremental stretch">
+                <div class="box secondary">
+                  <p><strong>Ámbito industrial</strong></p>
+                  <ul class="left">
+                    <li>Control de calidad</li>
+                    <li>Análisis de materiales</li>
+                  </ul>
+                </div>
+                <div class="box secondary">
+                  <p><strong>Medicina</strong></p>
+                  <ul class="left">
+                    <li>Asistencia al diagnóstico: TACs, resonancias, radiografías</li>
+                  </ul>
+                </div>
+                <div class="box secondary">
+                  <img src="images/recaptcha.png" alt="ReCAPTCHA de Google" style="height: 12rem; float: right;">
+                  <p><strong>Transporte</strong></p>
+                  <ul class="left">
+                    <li>Vehículos autónomos</li>
+                  </ul>
+                </div>
+                <div class="box secondary">
+                  <p><strong>Redes sociales</strong></p>
+                  <ul class="left">
+                    <li>Etiquetado de personas</li>
+                    <li>Detección de lugares</li>
+                    <li>Detección de contenido no permitido</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div id="apli2" class="slide anchor-bottom">
+              <h1>Casos de aplicación</h1>
+              <div class="space"></div>
+              <div class="box secondary">
+                <strong>Detección de COVID en radiografías</strong>
+                <p>
+                  <i>COVIDGR Dataset and COVID-SDNet Methodology for Predicting COVID-19 Based on Chest X-Ray Images</i>. 
+                  S Tabik, A Gomez-Rios, J L Martin-Rodriguez, I Sevillano-Garcia, M Rey-Area, D Charte, E Guirado, J L Suarez, J Luengo, M A Valero-Gonzalez, P Garcia-Villanova, E Olmedo-Sanchez, F Herrera. <a href="https://doi.org/10.1109/jbhi.2020.3037127">10.1109/jbhi.2020.3037127</a>
+                </p>
+              </div>
+              <div class="space"></div>
+              <div class="box secondary">
+                <strong>Identificación de fases del acero</strong>
+                <p>
+                  <i>A tutorial on the segmentation of metallographic images: Taxonomy, new
+                    MetalDAM dataset, deep learning-based ensemble model, experimental
+                    analysis and challenges</i>.
+                    J Luengo, R Moreno, I Sevillano, D Charte, A Peláez-Vegas,
+                    M Fernández-Moreno, P Mesejo, F Herrera. <a href="https://doi.org/10.1016/j.inffus.2021.09.018">10.1016/j.inffus.2021.09.018</a>
+                  </p>
+                </div>
+                <div class="space"></div>
+              </div>
+              
+              <div id="apli3" class="slide">
+                <h1>Detección de COVID: datos disponibles</h1>
+                <p class="center">4 tipos de positivo</p>
+                <img src="images/covid1.png" alt="Severidad de síntomas en radiografías" style="height: 22rem">
+              </div>
+              
+              <div id="apli4" class="slide">
+                <h1>Preprocesamiento de los datos</h1>
+                <p class="center">Recorte y transformación de clases</p>
+                <img src="images/covidpreproc.png" alt="Recortes y transformaciones" style="height: 22rem">
+              </div>
+              
+              <div id="apli4-5" class="slide">
+                <h1>Trabajo previo</h1>
+                <img src="images/covidnetcaps.png" alt="Resultados de COVIDNet y COVID-CAPS" style="">
+                <div class="incremental in-place">
+                  <div><img src="images/sorrywhat.jpg" style="height: 18rem"></div>
+                  <div class="anchor-bottom">
+                    <div class="space"></div>
+                    <img src="images/covidx.png" alt="Orígenes de los datos del dataset COVIDx">
+                    <div class="space"></div>
+                  </div>
+                </div>
+              </div>
+              
+              <div id="apli5" class="slide">
+                <h1>Modelo base: ResNet-50</h1>
+                <img src="images/resnet50.png" alt="Modelo ResNet-34">
+              </div>
+              
+              <div id="apli6" class="slide">
+                <h1>Explicaciones del modelo</h1>
+                <img src="images/covidgradcam.png" alt="GradCAM para clase positiva" style="height: 10.5rem">
+                <img src="images/covidgradcam2.png" alt="GradCAM para clase negativa" style="height: 11.25rem">
+                <p class="center">Usamos <a href="https://arxiv.org/pdf/1610.02391.pdf"><strong>GradCAM</strong></a> para identificar regiones que activan cada clase</p>
+              </div>
+              
+              <div id="apli7" class="slide">
+                <h1>Resultados finales</h1>
+                <img src="images/covidresults.png" alt="Modelo ResNet-34">
+              </div>
+              
+              <div id="apli8" class="slide">
+                <h1>Metalografías: datos disponibles</h1>
+                <p class="center">5 fases del material: matriz, austenita, martensita-austenita, precipitado y defectos</p>
+                <p class="center">42 imágenes etiquetadas, <strong>164 sin etiquetar</strong></p>
+                <img src="images/metal1.png" alt="Severidad de síntomas en radiografías" style="max-height: 22rem">
+              </div>
+              
+              <div id="apli9" class="slide">
+                <h1>Modelos probados</h1>
+                <div class="incremental in-place">
+                  <div>
+                    <img src="images/unet2.png" alt="Unet" style="height: 15rem">
+                    <p class="center"><strong>UNet</strong></p>
+                  </div>
+                  <div>
+                    <img src="images/pixelnet.png" alt="Pixelnet" style="height: 15rem">
+                    <p class="center"><strong>PixelNet</strong></p>
+                  </div>
+                  <div>
+                    <img src="images/fpn.png" alt="FPN" style="height: 20rem">
+                    <p class="center"><strong>Feature Pyramid Network</strong></p>
+                  </div>
+                  <div>
+                    <img src="images/usss.png" alt="USSS" style="height: 20rem">
+                    <p class="center"><strong>Universal Semi-supervised Segmentation</strong></p>
+                  </div>
+                </div>
+              </div>
+              
+              <div id="apli9-5" class="slide">
+                <h1>Transfer learning</h1>
+                <img src="images/transfer.png" alt="Loss graph">
+              </div>
+              
+              <div id="apli10" class="slide">
+                <h1>Propuesta</h1>
+                <div>
+                  <img src="images/amve.png" alt="AMVE" style="height: 20rem">
+                  <p class="center"><strong>Artificial Multiview Ensemble</strong></p>
+                </div>
+              </div>
+              
+              <div id="conclusiones" class="slide blur">
+                <h1>Moralejas y comentarios</h1>
+                <ul class="incremental">
+                  <li>Más vale tener buenos datos que buenos modelos</li>
+                  <li>Modelos sin explicaciones no valen de mucho</li>
+                  <li><i>Deep Learning</i> no es la panacea: <a href="https://arxiv.org/pdf/2303.01494.pdf">Clustering?</a> <a href="https://catboost.ai/">CatBoost?</a></li>
+                  <li>Tener buenos datos bien etiquetados es muy costoso</li>
+                  <li>Entrenar muchos modelos es muy costoso</li>
+                </ul>
+                <div class="flex stretch next">
+                  <div class="box secondary"><img src="images/openaikenya.png" alt="Exclusive: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic"></div>
+                  <div class="box secondary"><img src="images/energyai.png" alt="Training a single AI model can emit as much carbon as five cars in their lifetimes"></div>
+                </div>
+              </div>
+              
+              <div class="slide cover clear" id="onemore" style="background-image: linear-gradient(black, black, purple); color: white">
+                <h1 style="font-weight: 100; font-size: 300%">One more thing...</h1>
+              </div>
+              
+              <div id="stablediffusion" class="slide">
+                <h1>Stable Diffusion!</h1>
+                <div class="incremental in-place">
+                  <div>
+                    <img src="images/epicsunset.png" alt="Epic sunset" style="height: 20rem">
+                    <p class="center">epic photo of a sunset over a cliff, ocean, dolphins, big tree, realistic</p>
+                  </div>
+                  <div>
+                    <img src="images/stabledif.svg" alt="Diagrama Stable Diffusion">
+                    <p class="center">aka <a href="https://beta.dreamstudio.ai/">DreamStudio</a>. Paper: <a href="https://arxiv.org/abs/2303.01494">arxiv.org/abs/2303.01494</a></p>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <script>
+                (function() {
+                  let toc_slide = document.querySelector(".maketoc")
+                  let current_section = ""
+                  let current_section_id = ""
+                  let slides = document.querySelectorAll(".slide")
+                  
+                  for (let i = 0; i < slides.length; ++i) {
+                    if (slides[i].classList.contains("cover") && !slides[i].classList.contains("titleslide")) {
+                      if (slides[i].querySelector("h1")) {
+                        current_section = slides[i].querySelector("h1").textContent;
+                        current_section_id = slides[i].id;
+                        if (slides[i].classList.contains("noshow")) continue;
+                        toc_slide.insertAdjacentHTML('beforeend', `<li><a class=internal href="#${current_section_id}">${current_section}</a></li>`)
+                      }
+                    } else if (!slides[i].classList.contains("clear")) {
+                      slides[i].insertAdjacentHTML('beforeend', `<footer><a class=internal href="#${current_section_id}">${current_section}</a></footer>`)
+                    }
+                  }
+                })()
+              </script>
+              
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js" integrity="sha384-PwRUT/YqbnEjkZO0zZxNqcxACrXe+j766U2amXcgMg5457rve2Y7I6ZJSm2A0mS4" crossorigin="anonymous"></script>
+              <!-- automatically render math in text elements -->
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>      <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                  renderMathInElement(document.body, {
+                    // customised options
+                    // • auto-render specific keys, e.g.:
+                    delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                    ],
+                    // • rendering keys, e.g.:
+                    throwOnError : false
+                  });
+                });
+              </script>
+              
+              <link rel="stylesheet"  href="assets/css/nord.min.css">
+              <script defer src="assets/js/highlight.min.js"></script>
+              
+              <script>window.addEventListener("load", function() {hljs.highlightAll();})</script>
+            </body>
+            </html>
+            
