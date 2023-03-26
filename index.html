@@ -659,7 +659,7 @@ x = Dense(classes, activation=classifier_activation, name="predictions")(x)
   <div id="apli8" class="slide">
     <h1>Metalografías: datos disponibles</h1>
     <p class="center">5 fases del material: matriz, austenita, martensita-austenita, precipitado y defectos</p>
-    <p class="center">42 imágenes etiquetadas, 164 sin etiquetar</p>
+    <p class="center">42 imágenes etiquetadas, <strong>164 sin etiquetar</strong></p>
     <img src="images/metal1.png" alt="Severidad de síntomas en radiografías" style="max-height: 22rem">
   </div>
 
@@ -684,6 +684,12 @@ x = Dense(classes, activation=classifier_activation, name="predictions")(x)
       </div>
     </div>
   </div>
+
+  <div id="apli9-5" class="slide">
+    <h1>Transfer learning</h1>
+    <img src="images/transfer.png" alt="Loss graph">
+  </div>
+
   <div id="apli10" class="slide">
     <h1>Propuesta</h1>
     <div>
@@ -692,19 +698,38 @@ x = Dense(classes, activation=classifier_activation, name="predictions")(x)
     </div>
   </div>
 
-  <div id="conclusiones" class="slide">
+  <div id="conclusiones" class="slide blur">
     <h1>Moralejas y comentarios</h1>
     <ul class="incremental">
       <li>Más vale tener buenos datos que buenos modelos</li>
-      <li>Tener buenos datos bien etiquetados es muy costoso</li>
-      <li>Entrenar muchos modelos es muy costoso</li>
       <li>Modelos sin explicaciones no valen de mucho</li>
       <li><i>Deep Learning</i> no es la panacea: <a href="https://arxiv.org/pdf/2303.01494.pdf">Clustering?</a> <a href="https://catboost.ai/">CatBoost?</a></li>
+      <li>Tener buenos datos bien etiquetados es muy costoso</li>
+      <li>Entrenar muchos modelos es muy costoso</li>
     </ul>
-    <div class="flex stretch">
+    <div class="flex stretch next">
     <div class="box secondary"><img src="images/openaikenya.png" alt="Exclusive: OpenAI Used Kenyan Workers on Less Than $2 Per Hour to Make ChatGPT Less Toxic"></div>
     <div class="box secondary"><img src="images/energyai.png" alt="Training a single AI model can emit as much carbon as five cars in their lifetimes"></div>
     </div>
+  </div>
+
+  <div class="slide cover clear" id="onemore" style="background-image: linear-gradient(black, black, purple); color: white">
+    <h1 style="font-weight: 100; font-size: 300%">One more thing...</h1>
+  </div>
+
+  <div id="stablediffusion" class="slide">
+    <h1>Stable Diffusion!</h1>
+    <div class="incremental in-place">
+      <div>
+        <img src="images/epicsunset.png" alt="Epic sunset" style="height: 20rem">
+        <p class="center">epic photo of a sunset over a cliff, ocean, dolphins, big tree, realistic</p>
+      </div>
+      <div>
+        <img src="images/stabledif.svg" alt="Diagrama Stable Diffusion">
+        <p class="center">aka <a href="https://beta.dreamstudio.ai/">DreamStudio</a>. Paper: <a href="https://arxiv.org/abs/2303.01494">arxiv.org/abs/2303.01494</a></p>
+      </div>
+    </div>
+    
   </div>
 
   <script>
